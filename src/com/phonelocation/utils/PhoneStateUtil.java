@@ -2,6 +2,7 @@ package com.phonelocation.utils;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 /*
  * 需要权限 
@@ -13,6 +14,9 @@ public class PhoneStateUtil {
 		TelephonyManager tm = (TelephonyManager) context
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneID = tm.getLine1Number();
-		return phoneID;
+		String deviceID = tm.getDeviceId();
+		Log.i("mytag", "phoneID:" + phoneID);
+		Log.i("mytag", "deviceID:" + deviceID);
+		return deviceID;
 	}
 }
