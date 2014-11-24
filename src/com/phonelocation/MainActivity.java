@@ -20,114 +20,115 @@ import com.phonelocation.LocationService.LocationServiceBinder;
 
 public class MainActivity extends Activity {
 
-	public static String ACTION = "com.phonelocation";
-	public static String MESSAGE = "message";
-	public static String MESSAGE_NOAUTH = "needauth";
-	public static String MESSAGE_NEWLOCATION = "location";
+    public static String ACTION = "com.phonelocation";
+    public static String MESSAGE = "message";
+    public static String MESSAGE_NOAUTH = "needauth";
+    public static String MESSAGE_NEWLOCATION = "location";
 
-	private Button btn_start;
-	private Button btn_stop;
-	private Button btn_auth;
+    private Button btn_start;
+    private Button btn_stop;
+    private Button btn_auth;
 
-	private TextView tv_fuwu;
-	private TextView tv_dingwei;
+    private TextView tv_fuwu;
+    private TextView tv_dingwei;
 
-	private Intent serviceIntent;
-	private LocationService locationService = null;
+    private Intent serviceIntent;
+    private LocationService locationService = null;
 
-	private BroadcastReceiver receiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String message = intent.getExtras().getString(MESSAGE);
-			if (message.equals(MESSAGE_NEWLOCATION)) {
-				if (locationService != null) {
-					BDLocation location = locationService.getLocation();
-					tv_dingwei.setText("(" + location.getLongitude() + " ,"
-							+ location.getLatitude() + " )"
-							+ location.getRadius());
-				}
-			} else if (message.equals(MESSAGE_NOAUTH)) {
-				Toast.makeText(MainActivity.this, "«Î»œ÷§", Toast.LENGTH_LONG)
-						.show();
-				if (locationService != null) {
-					tv_fuwu.setText("∂®Œª‘›Õ£");
-					locationService.stop();
-				}
-				startActivity(new Intent(MainActivity.this, AuthActivity.class));
-			}
-		}
+    //ÂπøÊí≠Êé•ÂèóËÄÖ„ÄÇÊé•Êî∂Êù•Ëá™ÊúçÂä°ÁöÑÊ∂àÊÅØ„ÄÇ
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String message = intent.getExtras().getString(MESSAGE);
+            if (message.equals(MESSAGE_NEWLOCATION)) {
+                if (locationService != null) {
+                    BDLocation location = locationService.getLocation();
+                    tv_dingwei.setText("(" + location.getLongitude() + " ,"
+                            + location.getLatitude() + " )"
+                            + location.getRadius());
+                }
+            } else if (message.equals(MESSAGE_NOAUTH)) {
+                Toast.makeText(MainActivity.this, "ËØ∑ËÆ§ËØÅ", Toast.LENGTH_LONG)
+                        .show();
+                if (locationService != null) {
+                    tv_fuwu.setText("ÂÆö‰ΩçÊöÇÂÅú");
+                    locationService.stop();
+                }
+                startActivity(new Intent(MainActivity.this, AuthActivity.class));
+            }
+        }
 
-	};
+    };
 
-	private ServiceConnection conn = new ServiceConnection() {
+    private ServiceConnection conn = new ServiceConnection() {
 
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			// TODO Auto-generated method stub
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            // TODO Auto-generated method stub
 
-		}
+        }
 
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			// TODO Auto-generated method stub
-			LocationServiceBinder binder = (LocationServiceBinder) service;
-			locationService = binder.getService();
-		}
-	};
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // TODO Auto-generated method stub
+            LocationServiceBinder binder = (LocationServiceBinder) service;
+            locationService = binder.getService();
+        }
+    };
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		btn_start = (Button) findViewById(R.id.btn_start);
-		btn_stop = (Button) findViewById(R.id.btn_stop);
-		btn_auth = (Button) findViewById(R.id.btn_auth);
-		tv_fuwu = (TextView) findViewById(R.id.tv_fuwu);
-		tv_dingwei = (TextView) findViewById(R.id.tv_dingwei);
+        btn_start = (Button) findViewById(R.id.btn_start);
+        btn_stop = (Button) findViewById(R.id.btn_stop);
+        btn_auth = (Button) findViewById(R.id.btn_auth);
+        tv_fuwu = (TextView) findViewById(R.id.tv_fuwu);
+        tv_dingwei = (TextView) findViewById(R.id.tv_dingwei);
 
-		serviceIntent = new Intent(MainActivity.this, LocationService.class);
-		bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
+        serviceIntent = new Intent(MainActivity.this, LocationService.class);
+        bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
 
-		tv_fuwu.setText("∂®ŒªŒ¥∆Ù∂Ø");
+        tv_fuwu.setText("ÂÆö‰ΩçÊú™ÂêØÂä®");
 
-		btn_start.setOnClickListener(new OnClickListener() {
+        btn_start.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				locationService.start();
-				tv_fuwu.setText("’˝‘⁄∂®Œª÷–...");
-			}
-		});
-		btn_stop.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationService.start();
+                tv_fuwu.setText("Ê≠£Âú®ÂÆö‰Ωç‰∏≠...");
+            }
+        });
+        btn_stop.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				locationService.stop();
-				tv_fuwu.setText("∂®Œª‘›Õ£");
-			}
-		});
-		btn_auth.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationService.stop();
+                tv_fuwu.setText("ÂÆö‰ΩçÊöÇÂÅú");
+            }
+        });
+        btn_auth.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this,
-						AuthActivity.class);
-				startActivity(intent);
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,
+                        AuthActivity.class);
+                startActivity(intent);
+            }
+        });
 
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(ACTION);
-		this.registerReceiver(receiver, filter);
-	}
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION);
+        this.registerReceiver(receiver, filter);
+    }
 
-	@Override
-	protected void onDestroy() {
-		locationService = null;
-		unbindService(conn);
-		unregisterReceiver(receiver);
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        locationService = null;
+        unbindService(conn);
+        unregisterReceiver(receiver);
+        super.onDestroy();
+    }
 
 }
